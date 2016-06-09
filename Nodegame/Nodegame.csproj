@@ -38,7 +38,12 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Game1.cs" />
+    <Compile Include="Network\Basic.cs" />
+    <Compile Include="Network\Host.cs" />
+    <Compile Include="Network\INode.cs" />
+    <Compile Include="Network\Network.cs" />
+    <Compile Include="Network\Target.cs" />
+    <Compile Include="Nodegame.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

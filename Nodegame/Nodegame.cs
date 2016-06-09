@@ -1,21 +1,35 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
 
 namespace Nodegame
 {
+    public abstract class Drawable
+    {
+        protected string texturePath;
+        Texture2D getTexture(ContentManager cm)
+        {
+            return cm.Load<Texture2D>(texturePath);
+        }
+    }
     /// <summary>
     /// This is the main type for your game.
     /// </summary>
-    public class Game1 : Game
+    public class Nodegame : Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Network network;
+        private SpriteFont font;
 
-        public Game1()
+
+        public Nodegame()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            network = new Network();
         }
 
         /// <summary>
@@ -26,8 +40,6 @@ namespace Nodegame
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
-
             base.Initialize();
         }
 
@@ -39,7 +51,15 @@ namespace Nodegame
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            Vector2 playerPosition = new Vector2(
+                GraphicsDevice.Viewport.TitleSafeArea.X,
+                GraphicsDevice.Viewport.TitleSafeArea.Y +
+                GraphicsDevice.Viewport.TitleSafeArea.Height / 2);
 
+            var pgraphics = Content.Load<Texture2D>("Graphics\\Hexa");
+            font = Content.Load<SpriteFont>("Fonts\\Amosis");
+
+            network.initializeGraphics(graphics, Content);
             // TODO: use this.Content to load your game content here
         }
 
@@ -49,6 +69,7 @@ namespace Nodegame
         /// </summary>
         protected override void UnloadContent()
         {
+            
             // TODO: Unload any non ContentManager content here
         }
 
@@ -59,11 +80,21 @@ namespace Nodegame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed
+                    || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            // TODO: Add your update logic here
-
+            Vector2 mv = Vector2.Zero;
+            var step = gameTime.ElapsedGameTime.Milliseconds / 2;
+            if (Keyboard.GetState().IsKeyDown(Keys.Right))
+                mv.X += step;
+            if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                mv.Y -= step;
+            if (Keyboard.GetState().IsKeyDown(Keys.Left))
+                mv.X -= step;
+            if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                mv.Y += step;
+            //player.Move(mv);
+            
             base.Update(gameTime);
         }
 
@@ -73,11 +104,17 @@ namespace Nodegame
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            spriteBatch.Begin();
 
+
+            network.draw(spriteBatch);
+            GraphicsDevice.Clear(Color.Black);
+                        
             // TODO: Add your drawing code here
-
+            //player.Draw(spriteBatch);
             base.Draw(gameTime);
+            spriteBatch.DrawString(font, "Tjo knas", new Vector2(20, 200), Color.Red);
+            spriteBatch.End();
         }
     }
 }
