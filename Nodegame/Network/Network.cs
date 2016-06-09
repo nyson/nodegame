@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 using System.Collections.Generic;
 
 namespace Nodegame
@@ -35,9 +36,10 @@ namespace Nodegame
             var ownerTextPos = p;
             var typeTextPos = p;
             // owner text should be above node
-            ownerTextPos.Y -= 10;
-            typeTextPos.Y += 10;
+            ownerTextPos.Y -= 20;
+            typeTextPos.Y += 64;
 
+            Console.WriteLine("texture vector: " + p);
             if (n.getOwner() == Owner.Player)
             {
                 spriteBatch.DrawString(font, "Player", ownerTextPos, Color.Red);
@@ -51,17 +53,17 @@ namespace Nodegame
             switch (n.getType()) {
                 case NodeType.Basic:
                     spriteBatch.DrawString(font, "Basic", typeTextPos, Color.Red);
-                    spriteBatch.Draw(basicTexture, p, Color.Transparent);
+                    spriteBatch.Draw(basicTexture, p);
                     break;
 
                 case NodeType.Host:
                     spriteBatch.DrawString(font, "Host", typeTextPos, Color.Red);
-                    spriteBatch.Draw(hostTexture, p, Color.Transparent);
+                    spriteBatch.Draw(hostTexture, p);
                     break;
 
                 case NodeType.Target:
                     spriteBatch.DrawString(font, "Target", typeTextPos, Color.Red);
-                    spriteBatch.Draw(targetTexture, p, Color.Transparent);
+                    spriteBatch.Draw(targetTexture, p);
                     break;
 
             }
@@ -70,9 +72,9 @@ namespace Nodegame
         private List<INode> defaultNetwork() {
             var nodes = new List<INode>();  
             
-            nodes.Add(new Basic(Owner.Enemy, new Vector2(400, 400)));
-            nodes.Add(new Host(Owner.Player, new Vector2(200, 400)));
-            nodes.Add(new Target(Owner.Enemy, new Vector2(400, 200)));
+            nodes.Add(new Basic(Owner.Enemy, new Vector2(300, 300)));
+            nodes.Add(new Host(Owner.Player, new Vector2(100, 300)));
+            nodes.Add(new Target(Owner.Enemy, new Vector2(300, 100)));
             return nodes;
         }
     }
